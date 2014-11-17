@@ -1,0 +1,23 @@
+{
+    "name": "minity/yii-query-specification",
+    "description": "Implementation of Specification Pattern for Yii Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anton Tyutin",
+            "email": "anton@tyutin.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Minity\\QuerySpecification\\": "src"
+        }
+    },
+    "require-dev": {
+        "yiisoft/yii": "dev-master",
+        "phpunit/phpunit": "4.3.*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
