@@ -72,7 +72,7 @@ class Spec
     /**
      * @param $args
      *
-     * @return ReflectionClass
+     * @return SpecificationInterface
      */
     public static function createSpecWithArray($specClass, $args)
     {
