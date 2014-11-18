@@ -25,13 +25,13 @@ class Not implements SpecificationInterface
     }
 
     /**
-     * @param string $alias (not used)
+     * @param string $alias
      *
      * @return array string
      */
     public function getCriteria($alias = null)
     {
-        $criteria = $this->spec->getCriteria();
+        $criteria = $this->spec->getCriteria($alias);
         $criteria->condition = 'NOT (' . $criteria->condition . ')';
 
         return $criteria;
