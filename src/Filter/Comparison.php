@@ -11,9 +11,8 @@
 namespace Minity\QuerySpecification\Filter;
 
 use CDbCriteria;
-use Minity\QuerySpecification\SpecificationInterface;
 
-abstract class Comparison implements SpecificationInterface
+abstract class Comparison extends Filter
 {
     const EQUALS = '=';
     const NOT_EQUALS = '!=';
@@ -22,9 +21,6 @@ abstract class Comparison implements SpecificationInterface
     const GREATER_THEN = '>';
     const GREATER_THEN_OR_EQUALS = '>=';
     const LIKE = 'LIKE';
-
-    static private $paramsCounters = array();
-    static private $paramsSuffixes = array('', '_another', '_thirdone', '_fourthone');
 
     /**
      * @var
@@ -43,7 +39,7 @@ abstract class Comparison implements SpecificationInterface
      */
     private $operator;
 
-    public function __construct($operator, $column, $value, $alias = 't')
+    public function __construct($operator, $column, $value, $alias = null)
     {
         $this->operator = $operator;
         $this->column = $column;
@@ -56,9 +52,9 @@ abstract class Comparison implements SpecificationInterface
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias = null)
+    public function getCriteria($alias)
     {
-        $column = sprintf('%s.%s', $alias ?: $this->alias, $this->column);
+        $column = sprintf('%s.%s', $this->alias ?: $alias, $this->column);
         $paramName = $this->createParameterName($column);
 
         $criteria = new CDbCriteria();
@@ -66,35 +62,5 @@ abstract class Comparison implements SpecificationInterface
         $criteria->params[$paramName] = $this->value;
 
         return $criteria;
-    }
-
-    /**
-     * @param $column
-     *
-     * @return string
-     */
-    public function createParameterName($column)
-    {
-        $paramName = $this->createParameterBaseName($column);
-        if (!isset(self::$paramsCounters[$paramName])) {
-            self::$paramsCounters[$paramName] = 0;
-        }
-
-        $paramWithPrefix = $paramName . @self::$paramsSuffixes[self::$paramsCounters[$paramName]]
-            ?: '_' . self::$paramsCounters[$paramName];
-
-        self::$paramsCounters[$paramName]++;
-
-        return $paramWithPrefix;
-    }
-
-    /**
-     * @param $column
-     *
-     * @return string
-     */
-    public function createParameterBaseName($column)
-    {
-        return ':' . strtr($column, array('.' => '_', '`' => '', ' ' => ''));
     }
 }

@@ -19,5 +19,5 @@ interface SpecificationInterface
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias = null);
+    public function getCriteria($alias);
 }

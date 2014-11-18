@@ -34,39 +34,44 @@ class Spec
         return new Logic\Not($spec);
     }
 
-    static public function eq($column, $value, $alias = 't')
+    static public function eq($column, $value, $alias = null)
     {
         return new Filter\Equals($column, $value, $alias);
     }
 
-    static public function neq($column, $value, $alias = 't')
+    static public function neq($column, $value, $alias = null)
     {
         return new Filter\NotEquals($column, $value, $alias);
     }
 
-    static public function lt($column, $value, $alias = 't')
+    static public function lt($column, $value, $alias = null)
     {
         return new Filter\LessThen($column, $value, $alias);
     }
 
-    static public function lte($column, $value, $alias = 't')
+    static public function lte($column, $value, $alias = null)
     {
         return new Filter\LessThenOrEquals($column, $value, $alias);
     }
 
-    static public function gt($column, $value, $alias = 't')
+    static public function gt($column, $value, $alias = null)
     {
         return new Filter\GreaterThen($column, $value, $alias);
     }
 
-    static public function gte($column, $value, $alias = 't')
+    static public function gte($column, $value, $alias = null)
     {
         return new Filter\GreaterThenOrEquals($column, $value, $alias);
     }
 
-    static public function like($column, $value, $alias = 't')
+    static public function like($column, $value, $alias = null)
     {
         return new Filter\Like($column, $value, $alias);
+    }
+
+    static public function between($column, $from, $to, $alias = null)
+    {
+        return new Filter\Between($column, $from, $to, $alias);
     }
 
     /**

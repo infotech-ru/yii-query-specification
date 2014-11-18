@@ -29,7 +29,7 @@ class Not implements SpecificationInterface
      *
      * @return array string
      */
-    public function getCriteria($alias = null)
+    public function getCriteria($alias)
     {
         $criteria = $this->spec->getCriteria($alias);
         $criteria->condition = 'NOT (' . $criteria->condition . ')';

@@ -9,60 +9,42 @@
  */
 
 use Minity\QuerySpecification\Spec;
+use Minity\QuerySpecification\SpecificationInterface;
 
 class FilterTest extends PHPUnit_Framework_TestCase
 {
-    public function testGood()
+    /**
+     * @dataProvider provideGood
+     */
+    public function testGood(SpecificationInterface $spec, $expectedWhere, $expectedParams)
     {
-        $spec = Spec::orX(
-            Spec::not(
-                Spec::andX(
-                    Spec::gt('a', 15),
-                    Spec::lte('a', 25)
-                )
-            ),
-            Spec::like('s', 'some%')
-        );
-
-        $criteria = $spec->getCriteria();
-
-        $this->assertEquals('(NOT ((t.a > :t_a) AND (t.a <= :t_a_another))) OR (t.s LIKE :t_s)', $criteria->condition);
-        $this->assertEquals(array(':t_a' => 15, ':t_a_another' => 25, ':t_s' => 'some%'), $criteria->params);
+        $criteria = $spec->getCriteria('t');
+        $this->assertEquals($expectedWhere, $criteria->condition);
+        $this->assertEquals($expectedParams, $criteria->params);
     }
 
-    public function testAliasInConstructor()
+    public function provideGood()
     {
-        $spec = Spec::orX(
-            Spec::not(
-                Spec::andX(
-                    Spec::gt('a', 15, 'o'),
-                    Spec::lte('a', 25, 'o')
-                )
+        return array(
+            // $spec, $expectedWhere, $expectedParams
+            array(Spec::eq('a', 2), 't.a = :t_a', array(':t_a' => 2)),
+            array(Spec::eq('a', 2, 'tab'), 'tab.a = :tab_a', array(':tab_a' => 2)),
+            array(Spec::neq('b', 2, 'tab'), 'tab.b != :tab_b', array(':tab_b' => 2)),
+            array(Spec::lt('c', 2, 'tab'), 'tab.c < :tab_c', array(':tab_c' => 2)),
+            array(Spec::lte('d', 2, 'tab'), 'tab.d <= :tab_d', array(':tab_d' => 2)),
+            array(Spec::gt('e', 2, 'tab'), 'tab.e > :tab_e', array(':tab_e' => 2)),
+            array(Spec::gte('f', 2, 'tab'), 'tab.f >= :tab_f', array(':tab_f' => 2)),
+            array(Spec::like('g', 'str%', 'tab'), 'tab.g LIKE :tab_g', array(':tab_g' => 'str%')),
+            array(
+                Spec::andX(Spec::eq('i', 'blah'), Spec::neq('i', 'hey')),
+                '(t.i = :t_i) AND (t.i != :t_i_another)',
+                array(':t_i' => 'blah', ':t_i_another' => 'hey')
             ),
-            Spec::like('s', 'some%', 'a')
-        );
-
-        $criteria = $spec->getCriteria();
-
-        $this->assertEquals('(NOT ((o.a > :o_a) AND (o.a <= :o_a_another))) OR (a.s LIKE :a_s)', $criteria->condition);
-        $this->assertEquals(array(':o_a' => 15, ':o_a_another' => 25, ':a_s' => 'some%'), $criteria->params);
-    }
-
-    public function testAliasInGetCriteria()
-    {
-        $spec = Spec::orX(
-            Spec::not(
-                Spec::andX(
-                    Spec::gt('a', 15),
-                    Spec::lte('a', 25)
-                )
+            array(
+                Spec::orX(Spec::eq('j', 'blah'), Spec::eq('j', 'hey')),
+                '(t.j = :t_j) OR (t.j = :t_j_another)',
+                array(':t_j' => 'blah', ':t_j_another' => 'hey')
             ),
-            Spec::like('s', 'some%')
         );
-
-        $criteria = $spec->getCriteria('b');
-
-        $this->assertEquals('(NOT ((b.a > :b_a) AND (b.a <= :b_a_another))) OR (b.s LIKE :b_s)', $criteria->condition);
-        $this->assertEquals(array(':b_a' => 15, ':b_a_another' => 25, ':b_s' => 'some%'), $criteria->params);
     }
 }

@@ -36,7 +36,7 @@ abstract class LogicX implements SpecificationInterface
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias = null)
+    public function getCriteria($alias)
     {
         $criteria = new CDbCriteria();
 
