@@ -8,22 +8,23 @@
  * file that was distributed with this source code.
  */
 
+use Minity\QuerySpecification\Modifier\Order;
 use Minity\QuerySpecification\Spec;
 use Minity\QuerySpecification\SpecificationInterface;
 
-class FilterTest extends PHPUnit_Framework_TestCase
+class SpecificationsTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider provideGood
+     * @dataProvider provideFilterGood
      */
-    public function testGood(SpecificationInterface $spec, $expectedWhere, $expectedParams)
+    public function testFilterGood(SpecificationInterface $spec, $expectedWhere, $expectedParams)
     {
         $criteria = $spec->getCriteria('t');
         $this->assertEquals($expectedWhere, $criteria->condition);
         $this->assertEquals($expectedParams, $criteria->params);
     }
 
-    public function provideGood()
+    public function provideFilterGood()
     {
         return array(
             // $spec, $expectedWhere, $expectedParams
@@ -56,5 +57,15 @@ class FilterTest extends PHPUnit_Framework_TestCase
                 array(':t_j' => 'blah', ':t_j_another' => 'hey')
             ),
         );
+    }
+
+    public function testOrder()
+    {
+        $spec = Spec::order('a');
+        $this->assertEquals('t.a ASC', $spec->getCriteria('t')->order);
+
+        // order specifications will be merged by CDbCriteria#mergeWith() in reverse order
+        $spec = Spec::andX(Spec::order('b', Order::DIRECTION_DESC, 'g'), $spec);
+        $this->assertEquals('t.a ASC, g.b DESC', $spec->getCriteria('t')->order);
     }
 }

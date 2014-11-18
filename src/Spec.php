@@ -12,6 +12,7 @@ namespace Minity\QuerySpecification;
 
 use Minity\QuerySpecification\Logic;
 use Minity\QuerySpecification\Filter;
+use Minity\QuerySpecification\Modifier;
 use ReflectionClass;
 
 /**
@@ -73,6 +74,16 @@ class Spec
     {
         return new Filter\Between($column, $from, $to, $alias);
     }
+
+
+
+    static public function order($column, $dir = Modifier\Order::DIRECTION_ASC, $alias = null)
+    {
+        return new Modifier\Order($column, $dir, $alias);
+    }
+
+
+
 
     /**
      * @param $args
