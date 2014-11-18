@@ -36,6 +36,16 @@ class FilterTest extends PHPUnit_Framework_TestCase
             array(Spec::gte('f', 2, 'tab'), 'tab.f >= :tab_f', array(':tab_f' => 2)),
             array(Spec::like('g', 'str%', 'tab'), 'tab.g LIKE :tab_g', array(':tab_g' => 'str%')),
             array(
+                Spec::between('h', 1, 2),
+                't.h BETWEEN :t_h AND :t_h_another',
+                array(':t_h' => 1, ':t_h_another' => 2)
+            ),
+            array(
+                Spec::between('h', 1, 2, 'tab'),
+                'tab.h BETWEEN :tab_h AND :tab_h_another',
+                array(':tab_h' => 1, ':tab_h_another' => 2)
+            ),
+            array(
                 Spec::andX(Spec::eq('i', 'blah'), Spec::neq('i', 'hey')),
                 '(t.i = :t_i) AND (t.i != :t_i_another)',
                 array(':t_i' => 'blah', ':t_i_another' => 'hey')
