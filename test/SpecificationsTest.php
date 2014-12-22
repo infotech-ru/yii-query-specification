@@ -68,4 +68,19 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
         $spec = Spec::andX(Spec::order('b', Order::DIRECTION_DESC, 'g'), $spec);
         $this->assertEquals('t.a ASC, g.b DESC', $spec->getCriteria('t')->order);
     }
+
+    public function testJoin()
+    {
+        $spec1 = Spec::join('a');
+        $this->assertEquals(['a' => ['alias' => 'a']], $spec1->getCriteria('t')->with);
+
+        $spec2 = Spec::join('b', 'c');
+        $this->assertEquals(['b' => ['alias' => 'c']], $spec2->getCriteria('t')->with);
+
+        $spec = Spec::andX($spec1, $spec2);
+        $this->assertEquals(
+            ['a' => ['alias' => 'a'], 'b' => ['alias' => 'c']],
+            $spec->getCriteria('t')->with
+        );
+    }
 }

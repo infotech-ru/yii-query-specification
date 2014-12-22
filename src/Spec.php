@@ -82,6 +82,11 @@ class Spec
         return new Modifier\Order($column, $dir, $alias);
     }
 
+    static public function join($relationName, $alias = null)
+    {
+        return new Modifier\Join($relationName, $alias);
+    }
+
 
 
 
