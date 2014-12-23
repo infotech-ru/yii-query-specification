@@ -10,14 +10,15 @@
 
 namespace Minity\QuerySpecification;
 
+use CActiveRecord;
 use CDbCriteria;
 
 interface SpecificationInterface
 {
     /**
-     * @param string $alias
+     * @param CActiveRecord $model
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias);
+    public function getCriteria(CActiveRecord $model);
 }

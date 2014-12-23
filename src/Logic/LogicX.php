@@ -10,6 +10,7 @@
 
 namespace Minity\QuerySpecification\Logic;
 
+use CActiveRecord;
 use CDbCriteria;
 use Minity\QuerySpecification\SpecificationInterface;
 
@@ -32,16 +33,16 @@ abstract class LogicX implements SpecificationInterface
     }
 
     /**
-     * @param string $alias
+     * @param CActiveRecord $model
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias)
+    public function getCriteria(CActiveRecord $model)
     {
         $criteria = new CDbCriteria();
 
         foreach ($this->specs as $spec) {
-            $criteria->mergeWith($spec->getCriteria($alias), $this->operator);
+            $criteria->mergeWith($spec->getCriteria($model), $this->operator);
         }
 
         return $criteria;

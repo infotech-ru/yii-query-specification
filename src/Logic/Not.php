@@ -10,6 +10,8 @@
 
 namespace Minity\QuerySpecification\Logic;
 
+use CActiveRecord;
+use CDbCriteria;
 use Minity\QuerySpecification\SpecificationInterface;
 
 class Not implements SpecificationInterface
@@ -25,13 +27,13 @@ class Not implements SpecificationInterface
     }
 
     /**
-     * @param string $alias
+     * @param CActiveRecord $model
      *
-     * @return array string
+     * @return CDbCriteria
      */
-    public function getCriteria($alias)
+    public function getCriteria(CActiveRecord $model)
     {
-        $criteria = $this->spec->getCriteria($alias);
+        $criteria = $this->spec->getCriteria($model);
         $criteria->condition = 'NOT (' . $criteria->condition . ')';
 
         return $criteria;

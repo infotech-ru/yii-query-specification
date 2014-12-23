@@ -19,7 +19,7 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
      */
     public function testFilterGood(SpecificationInterface $spec, $expectedWhere, $expectedParams)
     {
-        $criteria = $spec->getCriteria('t');
+        $criteria = $spec->getCriteria($this->createModel('t'));
         $this->assertEquals($expectedWhere, $criteria->condition);
         $this->assertEquals($expectedParams, $criteria->params);
     }
@@ -62,25 +62,47 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
     public function testOrder()
     {
         $spec = Spec::order('a');
-        $this->assertEquals('t.a ASC', $spec->getCriteria('t')->order);
+        $this->assertEquals('t.a ASC', $spec->getCriteria($this->createModel('t'))->order);
 
         // order specifications will be merged by CDbCriteria#mergeWith() in reverse order
         $spec = Spec::andX(Spec::order('b', Order::DIRECTION_DESC, 'g'), $spec);
-        $this->assertEquals('t.a ASC, g.b DESC', $spec->getCriteria('t')->order);
+        $this->assertEquals('t.a ASC, g.b DESC', $spec->getCriteria($this->createModel('t'))->order);
     }
 
     public function testJoin()
     {
         $spec1 = Spec::join('a');
-        $this->assertEquals(['a' => ['alias' => 'a']], $spec1->getCriteria('t')->with);
+        $this->assertEquals(
+            array('a' => array('alias' => 'a')),
+            $spec1->getCriteria($this->createModel('t'))->with
+        );
 
         $spec2 = Spec::join('b', 'c');
-        $this->assertEquals(['b' => ['alias' => 'c']], $spec2->getCriteria('t')->with);
+        $this->assertEquals(
+            array('b' => array('alias' => 'c')),
+            $spec2->getCriteria($this->createModel('t'))->with
+        );
 
         $spec = Spec::andX($spec1, $spec2);
         $this->assertEquals(
-            ['a' => ['alias' => 'a'], 'b' => ['alias' => 'c']],
-            $spec->getCriteria('t')->with
+            array('a' => array('alias' => 'a'), 'b' => array('alias' => 'c')),
+            $spec->getCriteria($this->createModel('t'))->with
         );
+    }
+
+    /**
+     * @param $alias
+     *
+     * @return CActiveRecord|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createModel($alias)
+    {
+        $model = $this->getMockBuilder('CActiveRecord')
+            ->setMethods(array('getTableAlias'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $model->expects($this->any())->method('getTableAlias')->willReturn($alias);
+
+        return $model;
     }
 }

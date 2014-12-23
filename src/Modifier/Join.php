@@ -11,6 +11,7 @@
 namespace Minity\QuerySpecification\Modifier;
 
 
+use CActiveRecord;
 use CDbCriteria;
 use Minity\QuerySpecification\SpecificationInterface;
 
@@ -32,11 +33,11 @@ class Join implements SpecificationInterface
     }
 
     /**
-     * @param string $alias
+     * @param CActiveRecord $model
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias)
+    public function getCriteria(CActiveRecord $model)
     {
         return new CDbCriteria([
             'with' => [

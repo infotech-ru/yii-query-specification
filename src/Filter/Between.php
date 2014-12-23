@@ -10,6 +10,7 @@
 
 namespace Minity\QuerySpecification\Filter;
 
+use CActiveRecord;
 use CDbCriteria;
 
 class Between extends Filter
@@ -41,13 +42,13 @@ class Between extends Filter
 
 
     /**
-     * @param string $alias
+     * @param CActiveRecord $model
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias)
+    public function getCriteria(CActiveRecord $model)
     {
-        $column = sprintf('%s.%s', $this->alias ?: $alias, $this->column);
+        $column = sprintf('%s.%s', $this->alias ?: $model->getTableAlias(false, false), $this->column);
         $fromParam = self::createParameterName($column);
         $toParam = self::createParameterName($column);
 

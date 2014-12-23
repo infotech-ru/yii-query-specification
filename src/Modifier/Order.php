@@ -10,6 +10,7 @@
 
 namespace Minity\QuerySpecification\Modifier;
 
+use CActiveRecord;
 use CDbCriteria;
 use Minity\QuerySpecification\SpecificationInterface;
 
@@ -39,14 +40,20 @@ class Order implements SpecificationInterface
     }
 
     /**
-     * @param string $alias
+     * @param CActiveRecord $model
      *
      * @return CDbCriteria
      */
-    public function getCriteria($alias)
+    public function getCriteria(CActiveRecord $model)
     {
         $criteria = new CDbCriteria();
-        $criteria->order = sprintf('%s.%s %s', $this->alias ?: $alias, $this->column, $this->dir);
+
+        $criteria->order = sprintf(
+            '%s.%s %s',
+            $this->alias ?: $model->getTableAlias(false, false),
+            $this->column,
+            $this->dir
+        );
 
         return $criteria;
     }
