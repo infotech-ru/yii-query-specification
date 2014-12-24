@@ -29,7 +29,7 @@ class Join implements SpecificationInterface
     public function __construct($relationName, $alias = null)
     {
         $this->relationName = $relationName;
-        $this->alias = $alias ?: $relationName;
+        $this->alias = $alias;
     }
 
     /**
