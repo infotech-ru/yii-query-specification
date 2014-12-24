@@ -73,7 +73,7 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
     {
         $spec1 = Spec::join('a');
         $this->assertEquals(
-            array('a' => array('alias' => 'a')),
+            array('a' => array('alias' => null)),
             $spec1->getCriteria($this->createModel('t'))->with
         );
 
@@ -85,7 +85,7 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
 
         $spec = Spec::andX($spec1, $spec2);
         $this->assertEquals(
-            array('a' => array('alias' => 'a'), 'b' => array('alias' => 'c')),
+            array('a' => array('alias' => null), 'b' => array('alias' => 'c')),
             $spec->getCriteria($this->createModel('t'))->with
         );
     }
