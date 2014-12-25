@@ -10,6 +10,7 @@
 
 namespace Minity\QuerySpecification;
 
+use CActiveRecord;
 use Minity\QuerySpecification\Logic;
 use Minity\QuerySpecification\Filter;
 use Minity\QuerySpecification\Modifier;
@@ -85,6 +86,11 @@ class Spec
     static public function join($relationName, $alias = null)
     {
         return new Modifier\Join($relationName, $alias);
+    }
+
+    static public function related($relationName, CActiveRecord $object)
+    {
+        return new Filter\RelatedObjectEquals($relationName, $object);
     }
 
 
