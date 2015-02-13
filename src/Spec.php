@@ -76,7 +76,10 @@ class Spec
         return new Filter\Between($column, $from, $to, $alias);
     }
 
-
+    static public function in($column, $value, $alias = null)
+    {
+        return new Filter\In($column, $value, $alias);
+    }
 
     static public function order($column, $dir = Modifier\Order::DIRECTION_ASC, $alias = null)
     {
@@ -92,9 +95,6 @@ class Spec
     {
         return new Filter\RelatedObjectEquals($relationName, $object);
     }
-
-
-
 
     /**
      * @param $args

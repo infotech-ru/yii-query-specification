@@ -59,6 +59,26 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testInCondition()
+    {
+        $list = array(1, 2, 3);
+        $currentParams = CDbCriteria::$paramCount;
+
+        $spec = Spec::in('k', $list, 't');
+        $criteria = $spec->getCriteria($this->createModel('t'));
+
+        foreach ($list as $k => $v) {
+            $list[':ycp' . $currentParams++] = $v;
+            unset($list[$k]);
+        }
+
+        $this->assertEquals(
+            't.k IN (' . implode(', ', array_keys($list)) . ')',
+            $criteria->condition
+        );
+        $this->assertEquals($list, $criteria->params);
+    }
+
     public function testOrder()
     {
         $spec = Spec::order('a');
