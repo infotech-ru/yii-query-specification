@@ -96,6 +96,11 @@ class Spec
         return new Filter\RelatedObjectEquals($relationName, $object);
     }
 
+    static public function isNull($column, $alias = null)
+    {
+        return new Filter\IsNull($column, $alias = null);
+    }
+
     /**
      * @param $args
      *

@@ -56,6 +56,11 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
                 '(t.j = :t_j) OR (t.j = :t_j_another)',
                 array(':t_j' => 'blah', ':t_j_another' => 'hey')
             ),
+            array(
+                Spec::orX(Spec::eq('k', 'blah'), Spec::isNull('l')),
+                '(t.k = :t_k) OR (t.l IS NULL)',
+                array(':t_k' => 'blah')
+            ),
         );
     }
 
