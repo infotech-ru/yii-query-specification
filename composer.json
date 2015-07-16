@@ -1,6 +1,6 @@
 {
     "name": "minity/yii-query-specification",
-    "description": "Implementation of Specification Pattern for Yii Framework",
+    "description": "Implementation of Specification Pattern for DB queries under Yii Framework",
     "license": "MIT",
     "authors": [
         {
@@ -14,7 +14,7 @@
         }
     },
     "require-dev": {
-        "yiisoft/yii": "dev-master",
+        "yiisoft/yii": "@stable",
         "phpunit/phpunit": "4.3.*"
     },
     "config": {
