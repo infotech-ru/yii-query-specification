@@ -98,7 +98,7 @@ class Spec
 
     static public function isNull($column, $alias = null)
     {
-        return new Filter\IsNull($column, $alias = null);
+        return new Filter\IsNull($column, $alias);
     }
 
     /**
