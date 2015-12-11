@@ -86,9 +86,9 @@ class Spec
         return new Modifier\Order($column, $dir, $alias);
     }
 
-    static public function join($relationName, $alias = null)
+    static public function join($relationName, $alias = null, $together = false)
     {
-        return new Modifier\Join($relationName, $alias);
+        return new Modifier\Join($relationName, $alias, $together);
     }
 
     static public function related($relationName, CActiveRecord $object)

@@ -25,11 +25,16 @@ class Join implements SpecificationInterface
      * @var string|null
      */
     private $alias;
+    /**
+     * @var bool|null
+     */
+    private $together;
 
-    public function __construct($relationName, $alias = null)
+    public function __construct($relationName, $alias = null, $together = false)
     {
         $this->relationName = $relationName;
         $this->alias = $alias;
+        $this->together = $together;
     }
 
     /**
@@ -40,6 +45,7 @@ class Join implements SpecificationInterface
     public function getCriteria(CActiveRecord $model)
     {
         return new CDbCriteria([
+            'together' => $this->together,
             'with' => [
                 $this->relationName => [
                     'alias' => $this->alias
