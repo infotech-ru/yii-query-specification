@@ -108,10 +108,16 @@ class SpecificationsTest extends PHPUnit_Framework_TestCase
             $spec2->getCriteria($this->createModel('t'))->with
         );
 
-        $spec = Spec::andX($spec1, $spec2);
+        $spec3 = Spec::andX($spec1, $spec2);
         $this->assertEquals(
             array('a' => array('alias' => null), 'b' => array('alias' => 'c')),
-            $spec->getCriteria($this->createModel('t'))->with
+            $spec3->getCriteria($this->createModel('t'))->with
+        );
+
+        $spec4 = Spec::join('b', 'c', true);
+        $this->assertEquals(
+            array('b' => array('alias' => 'c')),
+            $spec4->getCriteria($this->createModel('t'))->with
         );
     }
 
